@@ -1,0 +1,12 @@
+## Interface: 16001, 120105
+## Interface-Forever: 16001
+## Title: ZippyMedia
+## Notes: Textures, fonts and sounds for Zippy's auras and UI. Registers them with LibSharedMedia-3.0 when it is present.
+## Author: Zippy
+## Version: 1.0.0
+## OptionalDeps: LibSharedMedia-3.0, SharedMedia, ForeverAuras, WeakAuras, ElvUI
+## X-Website: https://github.com/chriskalv/ZippyMedia
+## X-Category: Miscellaneous
+## IconTexture: Interface\AddOns\ZippyMedia\Textures\ClassicElite
+
+ZippyMedia.lua
