@@ -4,7 +4,7 @@ Small addon that includes everything needed for Zippy's UI: the dragon textures 
 
 ## Install
 
-1. Download `ZippyMedia-<version>.zip` from the [Releases](https://github.com/chriskalv/ZippyMedia/releases) page.
+1. Download the zip: [ZippyMedia-1.0.0.zip](https://github.com/chriskalv/ZippyMedia/raw/main/dist/ZippyMedia-1.0.0.zip) (also attached to the [Releases](https://github.com/chriskalv/ZippyMedia/releases)).
 2. Extract it into the `Interface\AddOns` folder of your WoW installation, so that `Interface\AddOns\ZippyMedia\ZippyMedia.toc` exists.
 3. Restart the game (a `/reload` is not enough for new files) and enable **ZippyMedia** in the addon list.
 
