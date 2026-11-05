@@ -13,6 +13,17 @@ Releases are published per addon as a zip whose root is the addon folder (for ex
 
 - `Profiles/Details.txt`: Zippy's Details! Damage Meter profile string (not an addon). Import in game with `/details options`, tab **Profiles**, **Import Profile**; open the file with the *Raw* button on GitHub to copy it without line breaks.
 
+## Development
+
+The Lua tests of the addons run without the game client, in [fengari](https://github.com/fengari-lua/fengari) (Lua in JavaScript) with stubs of the WoW API. With Node.js 22 in the repository root:
+
+```
+npm install
+npm test
+```
+
+`npm test` runs `tools/addon_test.mjs`: it resolves the TOC and the XML files of the addon, checks every Lua file with luaparse as Lua 5.1 and runs the tests in `tests/<Addon>/`. Development files stay outside the addon folders and are not part of any release zip.
+
 ## Licenses
 
 `LICENSE` (MIT) covers this repository's own files unless a folder says otherwise; third-party resources keep their own licenses, listed in each addon's README. The Square Minimap Buttons port keeps the ProjectAzilroka copyright notice for the parts taken from the original.
