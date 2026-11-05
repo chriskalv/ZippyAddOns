@@ -31,6 +31,14 @@ The textures are 128 × 128 BLP files with alpha. The names in the first column 
 - **[zDO] • Zippy's Dragon Overlay** (ForeverAuras): the four dragon textures.
 - Zippy's other auras reference the fonts *PT Sans Narrow* and *FORCED SQUARE* by name; with this addon installed they no longer depend on the SharedMedia pack or Details!.
 
+## Profiles
+
+| Addon | File | Import |
+|---|---|---|
+| Details! Damage Meter (Zippy's profile, exported 2026-11-05) | [`Profiles/Details.txt`](Profiles/Details.txt) | In game: `/details options`, tab **Profiles**, button **Import Profile**, paste the whole string from the file (open it with the *Raw* button on GitHub to copy it without line breaks). |
+
+The profile files are kept here so that they have a permanent home; they are not loaded by the addon and are not part of the release zip.
+
 ## Credits and licenses
 
 - **Dragon textures** (`Textures/Classic*.blp`): the classic elite dragon from Blizzard's original target frame, cut out and recolored by the contributors of the *Dragon Overlay* module of [ProjectAzilroka](https://github.com/Azilroka/ProjectAzilroka): Codeblake, Kkthnxbye, Narley and Durandil. Redistributed with their knowledge; the underlying artwork is © Blizzard Entertainment. Not for commercial use.
