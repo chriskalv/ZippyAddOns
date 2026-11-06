@@ -5,7 +5,7 @@ Zippy's addons for **WoW Forever** (Interface 16001), one folder per addon. Each
 | Addon | What it is | Status |
 |---|---|---|
 | [`ZippyMedia/`](ZippyMedia/README.md) | Textures, fonts and sounds for Zippy's auras and UI, registered with LibSharedMedia-3.0 | released, [v1.0.0](https://github.com/chriskalv/ZippyAddOns/releases/tag/v1.0.0) |
-| `SquareMinimapButtons/` | Port of the *Square Minimap Buttons* module of [ProjectAzilroka](https://github.com/Azilroka/ProjectAzilroka) by Azilroka to WoW Forever, with Azilroka's permission | in preparation |
+| [`SquareMinimapButtons/`](SquareMinimapButtons/README.md) | Port of the *Square Minimap Buttons* module of [ProjectAzilroka](https://github.com/Azilroka/ProjectAzilroka) by Azilroka to WoW Forever, with Azilroka's permission | 1.0.0, testing in the WoW Forever client; release zips appear under [Releases](https://github.com/chriskalv/ZippyAddOns/releases) |
 
 Releases are published per addon as a zip whose root is the addon folder (for example `ZippyMedia-1.0.0.zip` contains `ZippyMedia/`).
 
@@ -22,7 +22,7 @@ npm install
 npm test
 ```
 
-`npm test` runs `tools/addon_test.mjs`: it resolves the TOC and the XML files of the addon, checks every Lua file with luaparse as Lua 5.1 and runs the tests in `tests/<Addon>/`. Development files stay outside the addon folders and are not part of any release zip.
+`npm test` runs the Lua tests of the addon with `tools/addon_test.mjs` (TOC and XML files resolved, every Lua file checked as Lua 5.1, then the tests in `tests/<Addon>/`) and the tests of the release script in `tests/release.test.mjs`. `npm run release:smb` writes `dist/SquareMinimapButtons-<version>.zip` with `tools/release.mjs`, with the version from the TOC, the addon folder as the only root and no development files, which stay outside the addon folders.
 
 ## Licenses
 
