@@ -5,7 +5,7 @@ Zippy's addons for **WoW Forever** (Interface 16001), one folder per addon. Each
 | Addon | What it is | Status |
 |---|---|---|
 | [`ZippyMedia/`](ZippyMedia/README.md) | Textures, fonts and sounds for Zippy's auras and UI, registered with LibSharedMedia-3.0 | released, [v1.0.0](https://github.com/chriskalv/ZippyAddOns/releases/tag/v1.0.0) |
-| `SquareMinimapButtons/` | Port of the *Square Minimap Buttons* module of [ProjectAzilroka](https://github.com/Azilroka/ProjectAzilroka) by Azilroka to WoW Forever, with his permission | in preparation |
+| `SquareMinimapButtons/` | Port of the *Square Minimap Buttons* module of [ProjectAzilroka](https://github.com/Azilroka/ProjectAzilroka) by Azilroka to WoW Forever, with Azilroka's permission | in preparation |
 
 Releases are published per addon as a zip whose root is the addon folder (for example `ZippyMedia-1.0.0.zip` contains `ZippyMedia/`).
 
