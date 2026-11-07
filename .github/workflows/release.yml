@@ -1,0 +1,109 @@
+# Release: packs the addon files of this repository into ZippyMedia-<version>-forever.zip (root
+# folder ZippyMedia/, everything that is tracked except Profiles/, .github/ and dot files), writes
+# the release.json that addon managers for WoW Forever read, and creates the tag v<version> and the
+# GitHub release with both files as assets. Started by hand (Actions > Release > Run workflow) with
+# the version from ZippyMedia.toc; with "dry run" it only builds and checks the assets and keeps them
+# as a workflow artifact, no tag and no release.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release; must equal "## Version:" in ZippyMedia.toc (e.g. 1.0.1)'
+        required: true
+        type: string
+      notes:
+        description: 'Release notes (optional; the default names the contents and the install step)'
+        required: false
+        type: string
+        default: ''
+      dry_run:
+        description: 'Dry run: build and check the assets, create no tag and no release'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      ADDON: ZippyMedia
+      VERSION: ${{ inputs.version }}
+      DRY_RUN: ${{ inputs.dry_run }}
+      NOTES: ${{ inputs.notes }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check the version against the TOC and the existing tags
+        run: |
+          set -eu
+          toc=$(sed -n 's/^## Version:[[:space:]]*//p' "$ADDON.toc" | tr -d '\r')
+          echo "TOC version: $toc, requested: $VERSION"
+          test "$toc" = "$VERSION" || { echo "::error::the TOC says $toc, not $VERSION"; exit 1; }
+          if [ "$DRY_RUN" != "true" ] && git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null 2>&1; then
+            echo "::error::the tag v$VERSION exists already"; exit 1
+          fi
+
+      - name: Build the zip and the release.json
+        run: |
+          set -eu
+          rm -rf build dist && mkdir -p "build/$ADDON" dist
+          git ls-files | grep -v -E '^(Profiles/|\.github/|\.|.*/\.)' | while IFS= read -r f; do
+            mkdir -p "build/$ADDON/$(dirname "$f")"
+            cp -p "$f" "build/$ADDON/$f"
+          done
+          (cd build && zip -X -r "../dist/$ADDON-$VERSION-forever.zip" "$ADDON" >/dev/null)
+          unzip -Z1 "dist/$ADDON-$VERSION-forever.zip" | grep -v '/$' | sort
+          unzip -tq "dist/$ADDON-$VERSION-forever.zip"
+          test "$(unzip -Z1 "dist/$ADDON-$VERSION-forever.zip" | cut -d/ -f1 | sort -u)" = "$ADDON"
+          interface=$(sed -n 's/^## Interface-Forever:[[:space:]]*//p' "$ADDON.toc" | tr -d '\r' | head -1)
+          if [ -z "$interface" ]; then
+            interface=$(sed -n 's/^## Interface:[[:space:]]*//p' "$ADDON.toc" | tr -d '\r' | cut -d, -f1 | tr -d ' ' | head -1)
+          fi
+          case "$interface" in ''|*[!0-9]*) echo "::error::no numeric interface in $ADDON.toc"; exit 1;; esac
+          printf '{"releases":[{"name":"%s","version":"%s","filename":"%s-%s-forever.zip","nolib":false,"metadata":[{"flavor":"forever","interface":%s}]}]}\n' \
+            "$ADDON" "$VERSION" "$ADDON" "$VERSION" "$interface" > dist/release.json
+          python3 -c 'import json,sys; d=json.load(open("dist/release.json")); r=d["releases"][0]; assert r["filename"]==sys.argv[1] and isinstance(r["metadata"][0]["interface"], int), r' "$ADDON-$VERSION-forever.zip"
+          cat dist/release.json
+          ls -l dist
+
+      - name: Release notes
+        run: |
+          set -eu
+          if [ -n "$NOTES" ]; then
+            printf '%s\n' "$NOTES" > notes.md
+          else
+            printf '%s\n' "$ADDON v$VERSION: textures, fonts and sounds for Zippy's auras and UI, registered with LibSharedMedia-3.0; see README.md for the list." > notes.md
+          fi
+          printf '\nInstall the folder `%s` from the zip into `Interface\\AddOns`, or update through your addon manager.\n' "$ADDON" >> notes.md
+          cat notes.md
+
+      - name: Keep the assets as a workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZippyMedia-${{ inputs.version }}
+          path: |
+            dist/ZippyMedia-${{ inputs.version }}-forever.zip
+            dist/release.json
+            notes.md
+
+      - name: Create the tag and the release
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          gh release create "v$VERSION" \
+            "dist/$ADDON-$VERSION-forever.zip" \
+            dist/release.json \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "$ADDON v$VERSION" \
+            --notes-file notes.md
+          echo "released v$VERSION from $GITHUB_SHA"
