@@ -39,6 +39,10 @@ The textures are 128 × 128 BLP files with alpha. The names in the first column 
 
 The profile files are kept here so that they have a permanent home; they are not loaded by the addon and are not part of the release zip.
 
+## Releases
+
+Releases are made by the GitHub Actions workflow *Release* (Actions > Release > Run workflow, with the version from `ZippyMedia.toc`; *dry run* only builds the assets): it packs the addon files into `ZippyMedia-<version>-forever.zip` (root folder `ZippyMedia/`, without `Profiles/`), writes the `release.json` that addon managers for WoW Forever read, and publishes the release with the tag `v<version>`.
+
 ## Credits and licenses
 
 - **Dragon textures** (`Textures/Classic*.blp`): the classic elite dragon from Blizzard's original target frame, cut out and recolored by the contributors of the *Dragon Overlay* module of [ProjectAzilroka](https://github.com/Azilroka/ProjectAzilroka): Codeblake, Kkthnxbye, Narley and Durandil. Redistributed with their knowledge; the underlying artwork is © Blizzard Entertainment. Not for commercial use.
